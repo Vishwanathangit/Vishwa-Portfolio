@@ -1,4 +1,4 @@
-# 🌐 Vishwa's MERN Portfolio Website
+# 🌐 Vishwa's Portfolio Website
 
 A modern and interactive personal portfolio built with **React + Vite**, styled using **Tailwind CSS**, animated using **Framer Motion**, and powered by **Three.js (Fiber + Drei)** for 3D effects. It includes sections for skills, projects, experience, certifications, extracurriculars, and a contact form integrated with **EmailJS**.
 

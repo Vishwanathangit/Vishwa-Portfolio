@@ -1,0 +1,2328 @@
+# Code Repository Snapshot: Protfolio Website
+
+--------------------------------------------
+Generated with reposnap v1.3.0
+Project: https://github.com/akhshyganesh/reposnap#readme
+Author: akhshyganesh
+Generated on: 27/5/2025 at 7:15:48 pm
+--------------------------------------------
+
+
+📄 README.md
+  ---
+  # React + Vite
+  
+  This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+  
+  Currently, two official plugins are available:
+  
+  - [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
+  - [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+  
+  ## Expanding the ESLint configuration
+  
+  If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+  
+  ---
+
+📄 eslint.config.js
+  ---
+  import js from '@eslint/js'
+  import globals from 'globals'
+  import reactHooks from 'eslint-plugin-react-hooks'
+  import reactRefresh from 'eslint-plugin-react-refresh'
+  
+  export default [
+    { ignores: ['dist'] },
+    {
+      files: ['**/*.{js,jsx}'],
+      languageOptions: {
+        ecmaVersion: 2020,
+        globals: globals.browser,
+        parserOptions: {
+          ecmaVersion: 'latest',
+          ecmaFeatures: { jsx: true },
+          sourceType: 'module',
+        },
+      },
+      plugins: {
+        'react-hooks': reactHooks,
+        'react-refresh': reactRefresh,
+      },
+      rules: {
+        ...js.configs.recommended.rules,
+        ...reactHooks.configs.recommended.rules,
+        'no-unused-vars': ['error', { varsIgnorePattern: '^[A-Z_]' }],
+        'react-refresh/only-export-components': [
+          'warn',
+          { allowConstantExport: true },
+        ],
+      },
+    },
+  ]
+  
+  ---
+
+📄 index.html
+  ---
+  <!DOCTYPE html>
+  <html lang="en">
+    <head>
+      <meta charset="UTF-8" />
+      <link rel="icon" href="./src/assets/Images/logo.png">
+      <link rel="preconnect" href="https://fonts.googleapis.com" />
+      <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+      <link
+        href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;700&display=swap"
+        rel="stylesheet"
+      />
+      <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+      <title>Vishwa's Portfolio</title>
+    </head>
+    <body>
+      <div id="root"></div>
+      <script type="module" src="/src/main.jsx"></script>
+    </body>
+  </html>
+  ---
+
+📁 public/
+📁 src/
+  📄 App.css
+    ---
+    
+    ---
+
+  📄 App.jsx
+    ---
+    import { useState } from "react";
+    import React from "react";
+    import "./App.css";
+    import { LoadingScreen } from "./components/LoadingScreen";
+    import { Navbar } from "./components/Navbar";
+    import { MobileMenu } from "./components/MobileMenu";
+    import { Home } from "./components/sections/Home";
+    import { About } from "./components/sections/About";
+    import { Projects } from "./components/sections/Projects";
+    import { Skills } from "./components/sections/Skills";
+    import "./index.css";
+    import { Contact } from "./components/sections/Contact";
+    import { Interests } from "./components/sections/Interests";
+    import { Experience } from "./components/sections/Experience";
+    import { Extracurricular } from "./components/sections/Extracurricular Activities ";
+    import Certificates from "./components/sections/Certificates";
+    import Footer from "./components/sections/Footer"
+    function App() {
+      const [isLoaded, setIsLoaded] = useState(false);
+      const [menuOpen, setMenuOpen] = useState(false);
+      return (
+        <>
+          {!isLoaded && <LoadingScreen onComplete={() => setIsLoaded(true)} />}
+          <div
+            className={`min-h-screen transition-opacity duration-700 ${
+              isLoaded ? "opacity-100" : "opacity-0"
+            } bg-black text-gray-100`}
+          >
+            <Navbar menuOpen={menuOpen} setMenuOpen={setMenuOpen} />
+            <MobileMenu menuOpen={menuOpen} setMenuOpen={setMenuOpen} />
+            <Home />
+            <About />
+            <Skills />
+            <Projects />
+            <Experience />
+            <Certificates />
+            <Extracurricular Activites />
+            <Interests></Interests>
+            <Contact />
+            <Footer></Footer>
+          </div>
+        </>
+      );
+    }
+    export default App;
+    ---
+
+  📁 assets/
+    📁 images/
+  📁 components/
+    📄 LoadingScreen.jsx
+      ---
+      import { useEffect, useState } from "react";
+      import React from "react";
+      export const LoadingScreen = ({ onComplete }) => {
+        const [text, setText] = useState("");
+        const fullText = "<Hello Wolrd />";
+        useEffect(() => {
+          let index = 0;
+          const interval = setInterval(() => {
+            setText(fullText.substring(0, index));
+            index++;
+            if (index > fullText.length) {
+              clearInterval(interval);
+              setTimeout(() => {
+                onComplete();
+              }, 1000);
+            }
+          }, 100);
+          return () => clearInterval(interval);
+        }, [onComplete]);
+        return (
+          <div className="fixed inset-0 z-50 bg-black text-gray-100 flex flex-col items-center justify-center">
+            <div className="mb-4 text-4xl font-mono font-bold">
+              {text} <span className="animate-blink ml-1"> | </span>
+            </div>
+            <div className="w-[200px] h-[2px] bg-gray-800 rounded relative overflow-hidden">
+              <div className="w-[40%] h-full bg-blue-500 shadow-[0_0_15px_#3b82f6] animate-loading-bar"></div>
+            </div>
+          </div>
+        );
+      };
+      ---
+
+    📄 MobileMenu.jsx
+      ---
+      import { useEffect } from "react";
+      import React from "react";
+      export const MobileMenu = ({ menuOpen, setMenuOpen }) => {
+        useEffect(() => {
+          const handleClickOutside = (e) => {
+            if (menuOpen && !e.target.closest('.mobile-menu-content')) {
+              setMenuOpen(false);
+            }
+          };
+          document.addEventListener('mousedown', handleClickOutside);
+          return () => document.removeEventListener('mousedown', handleClickOutside);
+        }, [menuOpen, setMenuOpen]);
+        return (
+          <div
+            className={`fixed top-0 left-0 w-full h-screen bg-[rgba(10,10,10,0.95)] z-40 
+                       transition-all duration-300 ease-in-out overflow-hidden
+                       ${menuOpen ? "opacity-100 pointer-events-auto" : "opacity-0 pointer-events-none"}`}
+          >
+            <div className="mobile-menu-content flex flex-col items-center justify-center h-full">
+              <button
+                onClick={() => setMenuOpen(false)}
+                className="absolute top-6 right-6 text-white text-3xl focus:outline-none cursor-pointer hover:text-blue-500 transition-colors"
+                aria-label="Close Menu"
+              >
+                &times;
+              </button>
+              <div className="flex flex-col items-center space-y-8 px-4">
+                {[
+                  { id: "home", label: "Home" },
+                  { id: "about", label: "About" },
+                  { id: "skills", label: "Skills" },
+                  { id: "experience", label: "Experience" },
+                  { id: "projects", label: "Projects" },
+                  { id: "certificates", label: "Certifications" },
+                  { id: "about", label: "Resume" },
+                  { id: "extracurricular", label: "Activities" },
+                  { id: "interests", label: "Interests" },
+                  { id: "contact", label: "Contact" }
+                ].map((item, index) => (
+                  <a
+                    key={item.id}
+                    href={`#${item.id}`}
+                    onClick={() => setMenuOpen(false)}
+                    className={`text-2xl font-semibold text-white transform transition-all duration-300
+                                hover:text-blue-500
+                                ${menuOpen ? "opacity-100 translate-y-0" : "opacity-0 translate-y-5"}`}
+                    style={{ transitionDelay: menuOpen ? `${index * 50}ms` : '0ms' }}
+                  >
+                    {item.label}
+                  </a>
+                ))}
+              </div>
+            </div>
+          </div>
+        );
+      };
+      ---
+
+    📄 Navbar.jsx
+      ---
+      import { useEffect } from "react";
+      import React from "react";
+      const Protfolio = () => (
+        <span className="font-mono text-xl font-bold text-white">
+          Portfolio<span className="text-blue-500">.jsx</span>
+        </span>
+      );
+      export const Navbar = ({ menuOpen, setMenuOpen }) => {
+        useEffect(() => {
+          document.body.style.overflow = menuOpen ? "hidden" : "";
+        }, [menuOpen]);
+        return (
+          <nav className="fixed top-0 w-full z-40 bg-[rgba(10, 10, 10, 0.8)] backdrop-blur-lg border-b border-white/10 shadow-lg">
+            <div className="max-w-5xl mx-auto px-4">
+              <div className="flex justify-between items-center h-16">
+                <a href="#home" className="mr-8">  {/* Added margin-right here */}
+                  <Protfolio />
+                </a>
+                <div
+                  className="w-7 h-5 relative cursor-pointer z-40 md:hidden"
+                  onClick={() => setMenuOpen((prev) => !prev)}
+                >
+                  &#9776;
+                </div>
+                <div className="hidden md:flex items-center space-x-6">  {/* Reduced from space-x-8 to space-x-6 */}
+                  <a
+                    href="#home"
+                    className="text-gray-300 hover:text-white transition-colors"
+                  >
+                    Home
+                  </a>
+                  <a
+                    href="#about"
+                    className="text-gray-300 hover:text-white transition-colors"
+                  >
+                    About
+                  </a>
+                  <a
+                    href="#skills"
+                    className="text-gray-300 hover:text-white transition-colors"
+                  >
+                    Skills
+                  </a>
+                  <a
+                    href="#experience"
+                    className="text-gray-300 hover:text-white transition-colors"
+                  >
+                    Experience
+                  </a>
+                  <a
+                    href="#projects"
+                    className="text-gray-300 hover:text-white transition-colors"
+                  >
+                    Projects
+                  </a>
+                  <a
+                    href="#certifications"
+                    className="text-gray-300 hover:text-white transition-colors"
+                  >
+                    Certifications
+                  </a>
+                  <a
+                    href="#extracurricular"
+                    className="text-gray-300 hover:text-white transition-colors"
+                  >
+                    Activities
+                  </a>
+                   <a
+                    href="#about"
+                    className="text-gray-300 hover:text-white transition-colors"
+                  >
+                    Resume
+                  </a>
+                  <a
+                    href="#interests"
+                    className="text-gray-300 hover:text-white transition-colors"
+                  >
+                    Interests
+                  </a>
+                  <a
+                    href="#contact"
+                    className="text-gray-300 hover:text-white transition-colors"
+                  >
+                    Contact
+                  </a>
+                </div>
+              </div>
+            </div>
+          </nav>
+        );
+      };
+      ---
+
+    📄 RevealOnScroll.jsx
+      ---
+      import { useEffect, useRef } from "react";
+      import React from "react";
+      export const RevealOnScroll = ({ children }) => {
+        const ref = useRef(null);
+        useEffect(() => {
+          const element = ref.current;
+          if (!element) return;
+          if (!("IntersectionObserver" in window)) {
+            element.classList.add("visible");
+            return;
+          }
+          const observer = new IntersectionObserver(
+            ([entry]) => {
+              if (entry.isIntersecting) {
+                element.classList.add("visible");
+                observer.unobserve(element); 
+              }
+            },
+            { threshold: 0.1, rootMargin: "0px" }
+          );
+          element.classList.remove("visible"); 
+          observer.observe(element);
+          return () => observer.disconnect();
+        }, []);
+        return (
+          <div ref={ref} className="reveal">
+            {children}
+          </div>
+        );
+      };
+      ---
+
+    📁 sections/
+      📄 About.jsx
+        ---
+        import { motion } from "framer-motion";
+        import React from "react";
+        import { RevealOnScroll } from "../RevealOnScroll";
+        import { FaGraduationCap, FaDownload, FaUserTie } from "react-icons/fa";
+        export const About = () => {
+          const education = [
+            {
+              year: "2025",
+              degree: "B.E. ECE",
+              institution: "Meenakshi Sundararajan Engineering College",
+              description: "Graduated with Electronics and Communication Engineering",
+              icon: <FaGraduationCap className="text-blue-400" />
+            },
+            {
+              year: "2021",
+              degree: "12th Grade (HSC)",
+              institution: "Chennai Boys Higher Secondary School",
+              description: "Specialized in Mathematics and Computer Science",
+              icon: <FaGraduationCap className="text-green-400" />
+            },
+            {
+              year: "2019",
+              degree: "10th Grade (SSLC)",
+              institution: "Chennai Boys Higher Secondary School",
+              description: "Schooling with focus on Science and Mathematics",
+              icon: <FaGraduationCap className="text-purple-400" />
+            }
+          ];
+          return (
+            <section
+              id="about"
+              className="min-h-screen flex items-center justify-center py-20 bg-gradient-to-b from-gray-900 to-indigo-900/10"
+            >
+              <RevealOnScroll>
+                <div className="max-w-6xl mx-auto px-4">
+                  <motion.div
+                    initial={{ opacity: 0, y: 10 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.5 }}
+                    className="text-center mb-12"
+                  >
+                    <h2 className="text-4xl font-bold mb-4 bg-gradient-to-r from-blue-400 to-cyan-400 bg-clip-text text-transparent">
+                      About Me
+                    </h2>
+                    <p className="text-gray-400 max-w-2xl mx-auto text-lg">
+                      My journey, education, and passion for technology
+                    </p>
+                  </motion.div>
+                  <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                    <motion.div
+                      initial={{ opacity: 0, x: -20 }}
+                      whileInView={{ opacity: 1, x: 0 }}
+                      transition={{ duration: 0.5 }}
+                      className="bg-gray-800/50 rounded-xl border border-gray-700/50 p-8"
+                    >
+                      <div className="flex items-center mb-6">
+                        <div className="bg-blue-500/10 p-3 rounded-lg mr-4">
+                          <FaUserTie className="text-blue-400 text-2xl" />
+                        </div>
+                        <h3 className="text-2xl font-bold text-white">Who Am I?</h3>
+                      </div>
+                      <div className="space-y-4 text-gray-300">
+                        <p>
+                          I'm a passionate developer with a strong foundation in Electronics and Communication Engineering. My journey began with a curiosity for technology that grew through my academic years and continues to drive me today.
+                        </p>
+                        <p>
+                          I specialize in building modern web applications using cutting-edge technologies. My education has provided me with both theoretical knowledge and practical skills to solve complex problems.
+                        </p>
+                        <p>
+                          I enjoy learning new technologies, contributing to open-source projects, and I also do share my knowledge with others in the developer community.
+                        </p>
+                      </div>
+                      <div className="mt-12 pt-4 border-t border-gray-700">
+                        <a
+                          href="https://drive.google.com/file/d/1c1WeYCrFKAPAOOQ-1Bp7UhtS2nhCwiXj/view?usp=sharing"
+                          target="_blank"
+                          download
+                          className="inline-flex items-center px-6 py-3 bg-gradient-to-r from-blue-500 to-cyan-500 text-white font-medium rounded-lg hover:shadow-lg transition-all duration-150 hover:scale-[1.03] active:scale-95"
+                          rel="noopener noreferrer"
+                        >
+                          <FaDownload className="mr-2" />
+                          Download Resume
+                        </a>
+                      </div>
+                    </motion.div>
+                    <motion.div
+                      initial={{ opacity: 0, y: 20 }}
+                      whileInView={{ opacity: 1, y: 0 }}
+                      transition={{ duration: 0.5 }}
+                      className="bg-gray-800/50 rounded-xl border border-gray-700/50 p-8"
+                    >
+                      <div className="flex items-center mb-6">
+                        <div className="bg-green-500/10 p-3 rounded-lg mr-4">
+                          <FaGraduationCap className="text-green-400 text-2xl" />
+                        </div>
+                        <h3 className="text-2xl font-bold text-white">Education</h3>
+                      </div>
+                      <div className="space-y-6 relative pl-6 border-l border-gray-600">
+                        {education.map((edu, index) => (
+                          <motion.div
+                            key={index}
+                            initial={{ opacity: 0, x: 10 }}
+                            whileInView={{ opacity: 1, x: 0 }}
+                            transition={{ duration: 0.4, delay: index * 0.1 }}
+                            className="relative"
+                          >
+                            <div className="absolute -left-7 top-0 bg-gray-700 border-2 border-blue-400 w-5 h-5 rounded-full flex items-center justify-center">
+                              {edu.icon}
+                            </div>
+                            <div className="ml-2">
+                              <span className="text-xs text-gray-400">{edu.year}</span>
+                              <h4 className="font-bold text-white">{edu.degree}</h4>
+                              <p className="text-blue-400 text-sm mb-1">{edu.institution}</p>
+                              <p className="text-gray-400 text-sm">{edu.description}</p>
+                            </div>
+                          </motion.div>
+                        ))}
+                      </div>
+                    </motion.div>
+                  </div>
+                </div>
+              </RevealOnScroll>
+            </section>
+          );
+        };
+        ---
+
+      📄 Certificates.jsx
+        ---
+        import { motion } from "framer-motion";
+        import React from "react";
+        import { RevealOnScroll } from "../RevealOnScroll";
+        import { FaJava, FaPython, FaCode, FaDatabase, FaMicrosoft } from "react-icons/fa";
+        import { SiJavascript, SiHtml5, SiCss3, SiCanva } from "react-icons/si";
+        import { BiNetworkChart } from "react-icons/bi";
+        import { BsFillLightningChargeFill } from "react-icons/bs";
+        import Emclogo from '../../assets/Images/Emclogo.jpeg';
+        import Neo from '../../assets/Images/Neoorange.png';
+        import Guvi from '../../assets/Images/Guvilogo.png';
+        import Canva from '../../assets/Images/Canvalogo.jpeg';
+        import Cisco from '../../assets/Images/Ciscologo.png';
+        import Ima from '../../assets/Images/Imarticuslogo.jpeg';
+        import Qrl from '../../assets/Images/Qctrllogo.jpeg';
+        const Certifications = () => {
+          const certifications = [
+            {
+              title: "HTML & CSS Workshop",
+              issuer: "Error Makes Clever",
+              date: "August 2023",
+              description: "Certified in modern web markup, responsive design principles, CSS animations, and accessibility standards.",
+              icon: (
+                <div className="flex space-x-2">
+                  <SiHtml5 className="text-orange-600 text-3xl" />
+                  <SiCss3 className="text-blue-600 text-3xl" />
+                </div>
+              ),
+              badge: Emclogo,
+              skills: ["HTML5", "CSS3", "Flexbox/Grid", "Responsive Design"],
+              color: "from-orange-500 to-blue-500",
+              url: "https://drive.google.com/file/d/1l0AQ2GUQdUE5_DiN3M8xwttFkYTBkj3y/view?usp=sharing",
+              iconBg: "bg-white/90",
+            },
+            {
+              title: "Mastering JavaScript",
+              issuer: "Error Makes Clever",
+              date: "September 2023",
+              description: "Proved expertise in modern JavaScript, ES6+ features, asynchronous programming, and design patterns.",
+              icon: <SiJavascript className="text-yellow-400 text-3xl" />,
+              badge: Emclogo,
+              skills: ["Basic Coding", "DOM", "ES6+", "Async/Await", "Design Patterns"],
+              color: "from-amber-500 to-blue-500",
+              url: "https://drive.google.com/file/d/1CuE1OomqJ5YhZ2G_Tm2rfSC2apKLLelc/view?usp=sharing",
+              iconBg: "bg-gray-900/90",
+            },
+            {
+              title: "Fundamentals of Web Development",
+              issuer: "Error Makes Clever",
+              date: "January 2025",
+              description: "Covered core web technologies including HTML, CSS, JavaScript, and web performance optimization.",
+              icon: <FaCode className="text-purple-400 text-3xl" />,
+              badge: Emclogo,
+              skills: ["HTML5","CSS3","Tailwind CSS","ES6+", "Async/Await","DOM Manipulation", "Responsive Design", "Web APIs"],
+              color: "from-yellow-500 to-red-500",
+              url: "https://drive.google.com/file/d/1y6_tocoMmotH5RP2hn_0dPeTZO0YQY9S/view?usp=sharing",
+              iconBg: "bg-white/90",
+            },
+            {
+              title: "Prompt Engineering Certification",
+              issuer: "Error Makes Clever",
+              date: "May 2025",
+              description: "Mastered techniques for crafting effective prompts for AI language models and optimizing outputs.",
+              icon: <div className="text-emerald-400 text-3xl font-bold">AI</div>,
+              badge: Emclogo,
+              skills: ["LLMs", "Fine-tuning", "Optimization", "Retrieval-Augmented Generation", "AI Prompting"],
+              color: "from-emerald-500 to-green-500",
+              url: "https://drive.google.com/file/d/1zwA_y2_RWjwYBkZbona0t8K8wI_tCIfh/view?usp=sharing",
+              iconBg: "bg-gray-900/90",
+            },
+            {
+              title: "Programming in Core Java",
+              issuer: "Neo Orange Technology",
+              date: "October 2023",
+              description: "Mastered object-oriented programming concepts, Java syntax, and application development.",
+              icon: <FaJava className="text-red-500 text-3xl" />,
+              badge: Neo,
+              skills: ["OOP", "Java SE", "Problem Solving"],
+              color: "from-red-500 to-amber-500",
+              url: "https://drive.google.com/file/d/1OuK55aWbfrr8xYpIlTG7yqkxJS1ALdIN/view?usp=sharing",
+              iconBg: "bg-white/90",
+            },
+            {
+              title: "Python Programming",
+              issuer: "Guvi Geek Network Pvt Ltd",
+              date: "November 2024",
+              description: "Validated skills in Python programming, OOP concepts, debugging techniques, and application development",
+              icon: <FaPython className="text-yellow-500 text-3xl" />,
+              badge: Guvi,
+              skills: ["Basic Programminng", "Loops", "Debugging", "OOP"],
+              color: "from-blue-500 to-cyan-500",
+              url: "https://drive.google.com/file/d/1S68GkLTK_erBU_q8z-SomWph4294fPp8/view?usp=drive_link",
+              iconBg: "bg-white/90",
+            },
+            {
+              title: "Canva Essentials",
+              issuer: "Canva Design School",
+              date: "November 2024",
+              description: "Certified in graphic design principles, visual communication, and creating professional designs using Canva.",
+              icon: <SiCanva className="text-blue-400 text-3xl" />,
+              badge: Canva,
+              skills: ["Graphic Design", "Branding", "Visual Communication", "Photo Editing Fundamentals,"],
+              color: "from-blue-400 to-teal-500",
+              url: "https://drive.google.com/file/d/1EBGakMZhCesucbE841s8-ul5b5NJxzox/view?usp=sharing",
+              iconBg: "bg-white/90",
+            },
+            {
+              title: "Network Essentials",
+              issuer: "Cisco Networking Academy",
+              date: "March 2023",
+              description: "Validated foundational knowledge of networking concepts, protocols, and infrastructure components.",
+              icon: <BiNetworkChart className="text-blue-400 text-3xl" />,
+              badge: Cisco,
+              skills: ["TCP/IP", "Routing", "Security", "Network Communication", "IPv4 & IPv6"],
+              color: "from-blue-500 to-indigo-500",
+              url: "https://drive.google.com/file/d/1Mm0JgLuKGEHjYju9aGuahxTIShY4h1GS/view?usp=sharing",
+              iconBg: "bg-white/90",
+            },
+            {
+              title: "Workshop on Power BI",
+              issuer: "Imarticus Learning",
+              date: "November 2024",
+              description: "Certified in Power BI with hands-on experience in data collection, transformation, modeling, and visualization",
+              icon: <FaDatabase className="text-yellow-500 text-3xl" />,
+              badge: Ima,
+              skills: ["DAX", "Data Modeling", "Visualizations", "Power BI", "Data Preprocessing"],
+              color: "from-sky-500 to-blue-500",
+              url: "https://drive.google.com/file/d/1-dKYb3p249kDDeB2-trdH8oPeCMt3bTZ/view?usp=sharing",
+              iconBg: "bg-gray-900/90",
+            },
+            {
+              title: "Quantum Professional",
+              issuer: "Q-Ctrl",
+              date: "October 2024",
+              description: "Certified in basic quantum computing principles, Qiskit framework, and foundational quantum algorithms",
+              icon: <BsFillLightningChargeFill className="text-cyan-400 text-3xl" />,
+              badge: Qrl,
+              skills: ["Qubits", "Quantum Gates", "Qiskit"],
+              color: "from-cyan-400 to-blue-500",
+              url: "https://drive.google.com/file/d/1H9_2yUOeCSpAxCcocsT0IhDgA_UutjlY/view?usp=sharing",
+              iconBg: "bg-gray-900/90",
+            },
+          ];
+          return (
+            <section id="certifications" className="py-16 bg-gradient-to-b from-gray-900 to-indigo-900/10 relative">
+              <RevealOnScroll>
+                <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                  <motion.div
+                    initial={{ opacity: 0, y: 20 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.8 }}
+                    viewport={{ once: true }}
+                    className="text-center mb-12"
+                  >
+                    <h2 className="text-3xl sm:text-4xl font-bold mb-4 bg-gradient-to-r from-cyan-400 to-blue-500 bg-clip-text text-transparent">
+                      My Certifications
+                    </h2>
+                    <p className="text-gray-400 max-w-2xl mx-auto text-base sm:text-lg">
+                      Validated expertise through industry-recognized certifications
+                    </p>
+                  </motion.div>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
+                    {certifications.map((cert, index) => (
+                      <motion.a
+                        key={index}
+                        href={cert.url}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        initial={{ opacity: 0, y: 50 }}
+                        whileInView={{ opacity: 1, y: 0 }}
+                        transition={{ duration: 0.5, delay: index * 0.1 }}
+                        viewport={{ once: true, margin: "-50px" }}
+                        className={`group ${
+                          index >= certifications.length - 2
+                            ? "lg:col-span-2 lg:mx-auto lg:max-w-md"
+                            : ""
+                        }`}
+                      >
+                        <div className="h-full bg-gray-800/50 rounded-xl border border-gray-700/50 overflow-hidden hover:border-cyan-500/30 transition-all duration-300 hover:shadow-lg flex flex-col">
+                          <div className={`p-4 sm:p-6 ${cert.color} bg-gradient-to-r`}>
+                            <div className="flex justify-between items-start">
+                              <div>
+                                <h3 className="text-lg sm:text-xl font-bold text-white">{cert.title}</h3>
+                                <p className="text-black/90 text-sm sm:text-base">{cert.issuer}</p>
+                              </div>
+                              <div className={`${cert.iconBg} p-2 sm:p-3 rounded-lg backdrop-blur-sm flex items-center justify-center`}>
+                                {cert.icon}
+                              </div>
+                            </div>
+                          </div>
+                          <div className="p-4 sm:p-6 flex-grow flex flex-col">
+                            <div className="mb-4 flex justify-center">
+                              <div className="w-16 h-16 sm:w-20 sm:h-20 rounded-full bg-gray-700/50 border-2 border-white/10 flex items-center justify-center overflow-hidden">
+                                {typeof cert.badge === 'string' ? (
+                                  <img
+                                    src={cert.badge}
+                                    alt={`${cert.title} badge`}
+                                    className="w-full h-full object-cover"
+                                    onError={(e) => {
+                                      e.target.style.display = 'none';
+                                      e.target.nextSibling.style.display = 'block';
+                                    }}
+                                  />
+                                ) : (
+                                  <img
+                                    src={cert.badge}
+                                    alt={`${cert.title} badge`}
+                                    className="w-full h-full object-cover"
+                                  />
+                                )}
+                                <span
+                                  className="text-xs text-gray-400"
+                                  style={{ display: 'none' }}
+                                >
+                                  Badge Unavailable
+                                </span>
+                              </div>
+                            </div>
+                            <p className="text-gray-300 text-sm sm:text-base mb-4 sm:mb-6">{cert.description}</p>
+                            <div className="mt-auto">
+                              <div className="mb-4">
+                                <h4 className="text-sm text-gray-400 mb-2">Skills Validated:</h4>
+                                <div className="flex flex-wrap gap-2">
+                                  {cert.skills.map((skill, i) => (
+                                    <span
+                                      key={i}
+                                      className="bg-gray-700/50 text-gray-300 py-1 px-2 sm:px-3 rounded-full text-xs"
+                                    >
+                                      {skill}
+                                    </span>
+                                  ))}
+                                </div>
+                              </div>
+                              <div className="flex items-center justify-between border-t border-white/10 pt-4">
+                                <span className="text-sm text-gray-400">Issued: {cert.date}</span>
+                                <span className="text-xs bg-white/10 text-white py-1 px-2 rounded">
+                                  Verified
+                                </span>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </motion.a>
+                    ))}
+                  </div>
+                </div>
+              </RevealOnScroll>
+            </section>
+          );
+        };
+        export default Certifications;
+        ---
+
+      📄 Contact.jsx
+        ---
+        import { motion } from "framer-motion";
+        import React from "react";
+        import { RevealOnScroll } from "../RevealOnScroll";
+        import { useState } from "react";
+        import { FaPaperPlane, FaMapMarkerAlt, FaPhone, FaEnvelope, FaLinkedin, FaGithub, FaTwitter, FaBriefcase, FaBehance } from "react-icons/fa";
+        import emailjs from 'emailjs-com';
+        const Vishwa = () => {
+          return <span>Vishwa</span>;
+        };
+        export const Contact = () => {
+          const [formData, setFormData] = useState({
+            name: "",
+            email: "",
+            subject: "",
+            message: ""
+          });
+          const [isSubmitting, setIsSubmitting] = useState(false);
+          const [submitStatus, setSubmitStatus] = useState(null);
+          const handleChange = (e) => {
+            const { name, value } = e.target;
+            setFormData(prev => ({
+              ...prev,
+              [name]: value
+            }));
+          };
+          const handleSubmit = (e) => {
+            e.preventDefault();
+            setIsSubmitting(true);
+            emailjs.send(
+              import.meta.env.VITE_EMAILJS_SERVICE_ID,
+              import.meta.env.VITE_EMAILJS_TEMPLATE_ID,
+              formData,
+              import.meta.env.VITE_EMAILJS_USER_ID
+            )
+              .then((response) => {
+                setSubmitStatus('success');
+                setFormData({ name: "", email: "", subject: "", message: "" });
+              })
+              .catch((err) => {
+                setSubmitStatus('error');
+                console.error('Failed to send message:', err);
+              })
+              .finally(() => {
+                setIsSubmitting(false);
+                setTimeout(() => setSubmitStatus(null), 5000);
+              });
+          };
+          return (
+            <section
+              id="contact"
+              className="min-h-screen flex items-center justify-center py-20 bg-gradient-to-b from-gray-900 to-indigo-900/10 relative overflow-hidden"
+            >
+              <RevealOnScroll>
+                <div className="max-w-6xl mx-auto px-4 w-full">
+                  <motion.div
+                    initial={{ opacity: 0, y: 10 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.3 }}
+                    className="text-center mb-12"
+                  >
+                    <h3 className="text-2xl font-bold text-gray-100">
+                      <Vishwa />
+                    </h3>
+                    <h2 className="text-4xl font-bold mb-4 bg-gradient-to-r from-blue-400 to-cyan-400 bg-clip-text text-transparent">
+                      Get In Touch
+                    </h2>
+                    <p className="text-gray-300 max-w-2xl mx-auto text-lg">
+                      Have a project in mind or want to connect? Send me a message!
+                    </p>
+                  </motion.div>
+                  <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                    <motion.div
+                      initial={{ opacity: 0, x: -20 }}
+                      whileInView={{ opacity: 1, x: 0 }}
+                      transition={{ duration: 0.5 }}
+                      className="space-y-8"
+                    >
+                      <div className="bg-gray-800/70 rounded-lg border border-gray-500 p-8">
+                        <h3 className="text-2xl font-bold mb-6 text-gray-100 flex items-center">
+                          <FaPaperPlane className="mr-3 text-blue-400" />
+                          Contact Information
+                        </h3>
+                        <div className="space-y-6">
+                          <div className="flex items-start">
+                            <div className="bg-blue-500/20 p-3 rounded-lg mr-4">
+                              <FaMapMarkerAlt className="text-blue-400" />
+                            </div>
+                            <div>
+                              <h4 className="font-bold text-gray-100 mb-1">Location</h4>
+                              <p className="text-gray-300">Chennai, Tamil Nadu</p>
+                            </div>
+                          </div>
+                          <div className="flex items-start">
+                            <div className="bg-green-500/20 p-3 rounded-lg mr-4">
+                              <FaEnvelope className="text-green-400" />
+                            </div>
+                            <div>
+                              <h4 className="font-bold text-gray-100 mb-1">Email</h4>
+                              <a
+                                href="mailto:vishwanathan1720@gmail.com"
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="hover:text-cyan-400 transition-colors"
+                              >
+                                vishwanathan1720@gmail.com
+                              </a>
+                            </div>
+                          </div>
+                          <div className="flex items-start">
+                            <div className="bg-purple-500/20 p-3 rounded-lg mr-4">
+                              <FaPhone className="text-purple-400" />
+                            </div>
+                            <div>
+                              <h4 className="font-bold text-gray-100 mb-1">Phone</h4>
+                              <a href="tel:+91 7305266720" className="text-gray-300 hover:text-blue-400 transition-colors">
+                                +91 7305266720
+                              </a>
+                            </div>
+                          </div>
+                        </div>
+                        <div className="mt-8">
+                          <h4 className="font-bold text-gray-100 mb-4">Connect With Me</h4>
+                          <div className="flex space-x-4">
+                            {[
+                              { icon: <FaLinkedin className="text-blue-400" />, url: "https://www.linkedin.com/in/vishwanathan2004/", label: "LinkedIn" },
+                              { icon: <FaGithub className="text-gray-300" />, url: "https://github.com/Vishwanathangit/", label: "GitHub" },
+                              { icon: <FaBehance className="text-cyan-400" />, url: "https://www.behance.net/VishwanathanDesigns", label: "Behance" }
+                            ].map((social, index) => (
+                              <motion.a
+                                key={index}
+                                href={social.url}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="bg-gray-700/70 p-3 rounded-lg transition-all duration-200"
+                                whileHover={{ y: -2 }}
+                                aria-label={social.label}
+                              >
+                                {social.icon}
+                              </motion.a>
+                            ))}
+                          </div>
+                        </div>
+                      </div>
+                      <div className="bg-gray-800/70 rounded-lg border border-gray-500 p-8">
+                        <h3 className="text-2xl font-bold mb-6 text-gray-100 flex items-center">
+                          <FaBriefcase className="mr-3 text-green-400" />
+                          Availability
+                        </h3>
+                        <div className="space-y-4">
+                          <div>
+                            <h4 className="font-bold text-gray-100 mb-1">Current Status</h4>
+                            <div className="flex items-center">
+                              <span className="w-2 h-2 rounded-full bg-green-500 mr-2"></span>
+                              <span className="text-gray-300">Available for new opportunities</span>
+                            </div>
+                          </div>
+                          <div>
+                            <h4 className="font-bold text-gray-100 mb-1">Preferred Contact Method</h4>
+                            <p className="text-gray-300">Email or LinkedIn message</p>
+                          </div>
+                          <div>
+                            <h4 className="font-bold text-gray-100 mb-1">Response Time</h4>
+                            <p className="text-gray-300">Within 24 hours</p>
+                          </div>
+                        </div>
+                      </div>
+                    </motion.div>
+                    <motion.div
+                      initial={{ opacity: 0, x: 20 }}
+                      whileInView={{ opacity: 1, x: 0 }}
+                      transition={{ duration: 0.5 }}
+                      className="bg-gray-800/70 rounded-lg border border-gray-500 p-8"
+                    >
+                      <h3 className="text-2xl font-bold mb-6 text-gray-100 flex items-center">
+                        <FaEnvelope className="mr-3 text-cyan-400" />
+                        Send Me a Message
+                      </h3>
+                      {submitStatus === 'success' && (
+                        <motion.div
+                          initial={{ opacity: 0, y: 10 }}
+                          animate={{ opacity: 1, y: 0 }}
+                          transition={{ duration: 0.3 }}
+                          className="mb-6 p-4 bg-green-500/30 border border-green-400/50 rounded-lg text-green-400 text-center"
+                        >
+                          Message sent successfully! I'll get back to you soon.
+                        </motion.div>
+                      )}
+                      {submitStatus === 'error' && (
+                        <motion.div
+                          initial={{ opacity: 0, y: 10 }}
+                          animate={{ opacity: 1, y: 0 }}
+                          transition={{ duration: 0.3 }}
+                          className="mb-6 p-4 bg-red-500/30 border border-red-400/50 rounded-lg text-red-400 text-center"
+                        >
+                          Oops! Something went wrong. Please try again or email me directly.
+                        </motion.div>
+                      )}
+                      <form onSubmit={handleSubmit} className="space-y-6">
+                        <motion.div
+                          initial={{ opacity: 0, y: 10 }}
+                          whileInView={{ opacity: 1, y: 0 }}
+                          transition={{ duration: 0.3, delay: 0.1 }}
+                        >
+                          <label htmlFor="name" className="block text-sm font-medium text-gray-300 mb-1">
+                            Your Name
+                          </label>
+                          <input
+                            type="text"
+                            id="name"
+                            name="name"
+                            required
+                            value={formData.name}
+                            onChange={handleChange}
+                            className="w-full bg-gray-700/70 border border-gray-500 rounded-lg px-4 py-3 text-gray-100 transition focus:outline-none focus:border-cyan-400"
+                            placeholder="John Doe"
+                          />
+                        </motion.div>
+                        <motion.div
+                          initial={{ opacity: 0, y: 10 }}
+                          whileInView={{ opacity: 1, y: 0 }}
+                          transition={{ duration: 0.3, delay: 0.2 }}
+                        >
+                          <label htmlFor="email" className="block text-sm font-medium text-gray-300 mb-1">
+                            Email Address
+                          </label>
+                          <input
+                            type="email"
+                            id="email"
+                            name="email"
+                            required
+                            value={formData.email}
+                            onChange={handleChange}
+                            className="w-full bg-gray-700/70 border border-gray-500 rounded-lg px-4 py-3 text-gray-100 transition focus:outline-none focus:border-cyan-400"
+                            placeholder="your@email.com"
+                          />
+                        </motion.div>
+                        <motion.div
+                          initial={{ opacity: 0, y: 10 }}
+                          whileInView={{ opacity: 1, y: 0 }}
+                          transition={{ duration: 0.3, delay: 0.3 }}
+                        >
+                          <label htmlFor="subject" className="block text-sm font-medium text-gray-300 mb-1">
+                            Subject
+                          </label>
+                          <input
+                            type="text"
+                            id="subject"
+                            name="subject"
+                            required
+                            value={formData.subject}
+                            onChange={handleChange}
+                            className="w-full bg-gray-700/70 border border-gray-500 rounded-lg px-4 py-3 text-gray-100 transition focus:outline-none focus:border-cyan-400"
+                            placeholder="What's this about?"
+                          />
+                        </motion.div>
+                        <motion.div
+                          initial={{ opacity: 0, y: 10 }}
+                          whileInView={{ opacity: 1, y: 0 }}
+                          transition={{ duration: 0.3, delay: 0.4 }}
+                        >
+                          <label htmlFor="message" className="block text-sm font-medium text-gray-300 mb-1">
+                            Message
+                          </label>
+                          <textarea
+                            id="message"
+                            name="message"
+                            required
+                            rows={5}
+                            value={formData.message}
+                            onChange={handleChange}
+                            className="w-full bg-gray-700/70 border border-gray-500 rounded-lg px-4 py-3 text-gray-100 transition focus:outline-none focus:border-cyan-400"
+                            placeholder="Tell me about your project..."
+                          ></textarea>
+                        </motion.div>
+                        <motion.div
+                          initial={{ opacity: 0, y: 10 }}
+                          whileInView={{ opacity: 1, y: 0 }}
+                          transition={{ duration: 0.3, delay: 0.5 }}
+                        >
+                          <button
+                            type="submit"
+                            disabled={isSubmitting}
+                            className="w-full bg-gradient-to-r from-cyan-500 to-blue-500 text-gray-100 py-3 px-6 rounded-lg font-medium transition-all hover:from-cyan-600 hover:to-blue-600 disabled:opacity-50"
+                          >
+                            <span className="flex items-center justify-center">
+                              {isSubmitting ? (
+                                'Sending...'
+                              ) : (
+                                <>
+                                  <FaPaperPlane className="mr-2" />
+                                  Send Message
+                                </>
+                              )}
+                            </span>
+                          </button>
+                        </motion.div>
+                      </form>
+                    </motion.div>
+                  </div>
+                </div>
+              </RevealOnScroll>
+            </section>
+          );
+        };
+        export default Contact;
+        ---
+
+      📄 Experience.jsx
+        ---
+        import { motion } from "framer-motion";
+        import React from "react";
+        import { RevealOnScroll } from "../RevealOnScroll";
+        import { FaLaptopCode, FaCalendarAlt, FaTasks, FaCertificate, FaFigma, FaMicrochip } from "react-icons/fa";
+        export const Experience = () => {
+          const internships = [
+            {
+              role: "Python Full Stack",
+              company: "Shiash Info Solutions Private Limited",
+              duration: "Aug 2024 - Oct 2024",
+              description: "Completed a 3-month intensive Full Stack Python internship focusing on desktop, console, and web application development. Gained strong foundational and hands-on experience in backend logic, GUI development, and database management using Python.",
+              responsibilities: [
+                "Developed 5+ Python-based GUI applications using Tkinter",
+                "Built console and web apps integrating Python with SQL databases",
+                "Implemented CRUD operations and user input validations",
+                "Designed modular code with error handling and functional flow"
+              ],
+              certificateUrl: "https://drive.google.com/file/d/1_1lQAWaD-VXIMhnQJUPVNEpUVwD4i97h/view?usp=sharing",
+              icon: <FaLaptopCode className="text-white" />,
+              color: "bg-gradient-to-br from-purple-500 to-purple-700"
+            },
+            {
+              role: "UI/UX Designer",
+              company: "RETECH Solutions Private Limited",
+              duration: "Jul 2024 - Aug 2024",
+              description: "Completed an online internship in UI/UX Design with a strong focus on user-centered design principles and real-time mobile app design using Figma.",
+              responsibilities: [
+                "Designed an E-Commerce Mobile App UI for 'Online Shopping for Various Categories' using Figma",
+                "Created wireframes, low/mid/high-fidelity prototypes for responsive designs",
+                "Applied key UX laws: Hick’s Law, Fitts’s Law, Jakob’s Law, and Law of Proximity",
+                "Practiced design systems, consistency, accessibility, and user flow mapping"
+        
+              ],
+              certificateUrl: "https://drive.google.com/file/d/1bjkMAgs5fcClh2ZpXzahW3bmuruUjbdz/view?usp=sharing",
+              icon: <FaFigma className="text-white" />,
+              color: "bg-gradient-to-br from-blue-500 to-blue-700"
+            },
+            {
+              role: "Frontend Developer",
+              company: "Empower Guiding Centre",
+              duration: "Jun 2023 - Jul 2023",
+              description: "Successfully completed a one-month internship in Frontend Development, focusing on web design fundamentals and project-based learning using modern frontend tools and technologies.",
+              responsibilities: [
+                "Built static web pages using HTML, CSS, and JavaScript",
+                "Learned and applied responsive design principles",
+                "Worked with Visual Studio Code IDE for structured web development",
+                "Developed user-friendly UI with consistent layout and styling"
+        
+              ],
+              certificateUrl: "https://drive.google.com/file/d/1yoy9rXKBCKFge2kWBcylGGhIfMMEvukW/view?usp=sharing",
+              icon: <FaLaptopCode className="text-white" />,
+              color: "bg-gradient-to-br from-green-500 to-green-700"
+            },
+            {
+              role: "Internship Trainee",
+              company: "National Small Industries Corporation Ltd.",
+              duration: "Feb 2023 - Feb 2023",
+              description: "Completed a 2-week internship focused on the fundamentals of Embedded Systems and IoT, including hands-on experience with microcontrollers, sensors, and simulation tools.",
+              responsibilities: [
+                "Worked on basic embedded projects using Arduino UNO and sensors",
+                "Designed circuit simulations using Proteus Design Suite",
+                "Explored core IoT concepts and real-time applications",
+                "Learned fundamentals of embedded programming and hardware-software interfacing"
+        
+              ],
+              certificateUrl: "https://drive.google.com/file/d/1KmJc604RoJI5Y2MIGlUPXlavGXPMOxzK/view?usp=sharing",
+              icon: <FaMicrochip className="text-white" />,
+              color: "bg-gradient-to-br from-yellow-500 to-yellow-700"
+            }
+          ];
+          return (
+            <section id="experience" className="min-h-screen flex items-center justify-center py-20 bg-gray-900">
+              <div className="max-w-7xl mx-auto px-8">
+                <RevealOnScroll>
+                  <motion.div
+                    initial={{ opacity: 0, y: 20 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.5 }}
+                    className="text-center mb-20"
+                  >
+                    <h2 className="text-5xl font-bold mb-6 bg-gradient-to-r from-blue-400 to-cyan-400 bg-clip-text text-transparent">
+                      Internship Experience
+                    </h2>
+                    <p className="text-gray-400 max-w-3xl mx-auto text-xl">
+                      Verified professional internships with detailed responsibilities and certificates
+                    </p>
+                  </motion.div>
+                  <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
+                    {internships.map((intern, index) => (
+                      <motion.div
+                        key={index}
+                        initial={{ opacity: 0, y: 30 }}
+                        whileInView={{ opacity: 1, y: 0 }}
+                        transition={{ duration: 0.5, delay: index * 0.1 }}
+                        className="flex"
+                      >
+                        <div className="flex-1 bg-gray-800/50 rounded-xl border border-gray-700/50 p-8 transition-all duration-300 hover:border-blue-400/30 hover:shadow-[0_10px_30px_rgba(96,165,250,0.1)] group">
+                          <div className="flex flex-col h-full">
+                            <div className="flex items-start gap-6 mb-6">
+                              <div className={`${intern.color} p-4 rounded-xl flex-shrink-0 shadow-lg`}>
+                                {intern.icon}
+                              </div>
+                              <div>
+                                <h3 className="text-2xl font-bold text-white mb-1">{intern.role}</h3>
+                                <p className="text-blue-400 text-lg">{intern.company}</p>
+                                <div className="flex items-center text-gray-400 mt-2">
+                                  <FaCalendarAlt className="mr-2" />
+                                  <span>{intern.duration}</span>
+                                </div>
+                              </div>
+                            </div>
+                            <p className="text-gray-300 mb-6 text-lg">
+                              {intern.description}
+                            </p>
+                            <div className="mb-8">
+                              <h4 className="flex items-center text-white font-semibold mb-4">
+                                <FaTasks className="mr-3 text-blue-400" />
+                                Key Responsibilities:
+                              </h4>
+                              <ul className="space-y-4 pl-2">
+                                {intern.responsibilities.map((item, i) => (
+                                  <li key={i} className="flex items-start text-gray-300">
+                                    <span className="inline-block w-2 h-2 rounded-full bg-blue-400 mt-2 mr-3"></span>
+                                    <span className="text-lg">{item}</span>
+                                  </li>
+                                ))}
+                              </ul>
+                            </div>
+                            <div className="mt-auto pt-4">
+                              <a
+                                href={intern.certificateUrl}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                download
+                                className="inline-flex items-center justify-center w-full px-6 py-3 bg-gray-700/50 border border-gray-600 rounded-lg text-blue-400 hover:bg-blue-500/10 hover:text-white transition-colors group-hover:border-blue-400/50 text-lg"
+                              >
+                                <FaCertificate className="mr-3" />
+                                Certificate
+                              </a>
+                            </div>
+                          </div>
+                        </div>
+                      </motion.div>
+                    ))}
+                  </div>
+                </RevealOnScroll>
+              </div>
+            </section>
+          );
+        };
+        ---
+
+      📄 Extracurricular Activities .jsx
+        ---
+        import { RevealOnScroll } from "../RevealOnScroll";
+        import React from "react";
+        import { FaCode,FaChalkboardTeacher, FaUsers } from "react-icons/fa";
+        export const Extracurricular = () => {
+          const activities = [
+            {
+              title: "Website Team Lead",
+              organization: "Pranav 2K24",
+              duration: "Apr 2024",
+              description: [
+                "Led a team to develop a symposium website for our college",
+                "Built using HTML, CSS, Bootstrap, and JavaScript",
+                "Deployed the website successfully on Hostinger"
+              ],
+              icon: <FaCode className="text-yellow-500 text-xl" />,
+              accent: "from-yellow-600/20 to-yellow-600/10"
+            },
+            {
+              title: "Event - Coordinator",
+              organization: "Pranav - 2K24",
+              duration: "Apr 2024",
+              description: [
+                `Served as Event Coordinator for "Fusion Forum" at our college symposium`,
+                "Conducted the event smoothly along with my team",
+                "Managed participation of 50+ teams with efficient coordination"
+              ],
+              icon: <FaUsers className="text-purple-500 text-xl" />,
+              accent: "from-purple-600/20 to-purple-600/10"
+            },
+            {
+              title: "Presentation - E Cube",
+              organization: "MSEC",
+              duration: "Sept 2024",
+              description: [
+                "Presented a mini project at the E-Cube (Enrichment, Enhancement, Empowerment) inter-college event",
+                "Secured 3rd prize among multiple participating teams",
+                "Demonstrated technical and practical knowledge effectively"
+              ],
+              icon: <FaChalkboardTeacher className="text-green-500 text-xl" />,
+              accent: "from-green-600/20 to-green-600/10"
+            }
+          ];
+          return (
+            <section id="extracurricular" className="py-20 bg-gradient-to-b from-gray-900/95 via-gray-900 to-purple-900/30">
+              <RevealOnScroll>
+                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                  <div className="text-center mb-16">
+                    <h2 className="text-4xl md:text-5xl font-bold bg-gradient-to-r from-purple-400 via-pink-400 to-pink-600 bg-clip-text text-transparent inline-block">
+                      Extracurricular Activities
+                    </h2>
+                    <p className="mt-4 text-lg text-gray-400 max-w-2xl mx-auto">
+                      Beyond academics, I actively engage in tech communities and continuous learning
+                    </p>
+                  </div>
+                  <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                    {activities.map((activity, index) => (
+                      <div 
+                        key={index} 
+                        className={`relative p-6 rounded-2xl bg-gradient-to-br ${activity.accent} border border-white/10 hover:border-transparent transition-all duration-300 hover:scale-[1.02] group overflow-hidden`}
+                      >
+                        <div className="absolute inset-0 bg-gradient-to-br from-transparent via-white/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+                        <div className="relative z-10 flex flex-col h-full">
+                          <div className="flex items-start gap-5 mb-4">
+                            <div className="p-3 rounded-xl bg-white/5 backdrop-blur-sm group-hover:bg-white/10 transition-all duration-300 shadow-lg">
+                              {activity.icon}
+                            </div>
+                            <div>
+                              <h3 className="text-xl font-bold text-white">{activity.title}</h3>
+                              <p className="text-purple-300/90 font-medium">{activity.organization}</p>
+                            </div>
+                          </div>
+                          <span className="text-sm px-3 py-1 rounded-full bg-white/5 text-purple-300 mb-4 inline-block">
+                            {activity.duration}
+                          </span>
+                          <ul className="space-y-2 flex-grow">
+                            {activity.description.map((item, i) => (
+                              <li 
+                                key={i} 
+                                className="flex items-start before:content-['▹'] before:text-purple-400 before:mr-3 before:mt-1 before:text-sm text-gray-300"
+                              >
+                                {item}
+                              </li>
+                            ))}
+                          </ul>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                  <div className="absolute left-0 right-0 -bottom-20 h-40 w-full bg-gradient-to-t from-purple-900/50 to-transparent pointer-events-none"></div>
+                </div>
+              </RevealOnScroll>
+            </section>
+          );
+        };
+        ---
+
+      📄 Footer.jsx
+        ---
+        import { motion } from "framer-motion";
+        import React from "react";
+        import { FaLinkedin, FaGithub,FaEnvelope, FaPhone, FaMapMarkerAlt, FaBehance } from "react-icons/fa";
+        export default function Footer() {
+          return (
+            <footer className="bg-gradient-to-t from-gray-900 to-indigo-900/10 py-12 relative overflow-hidden">
+              <div className="max-w-6xl mx-auto px-4">
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-8 text-center md:text-left">
+                  <motion.div
+                    initial={{ opacity: 0, y: 10 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.3 }}
+                    className="space-y-4"
+                  >
+                    <h3 className="text-2xl font-bold text-gray-100">
+                      &lt;Vishwa /&gt;
+                    </h3>
+                    <p className="text-gray-300 text-sm">
+                      Building innovative web solutions with passion and precision.
+                    </p>
+                    <div className="flex justify-center md:justify-start space-x-4">
+                      {[
+                        { icon: <FaLinkedin className="text-blue-400" />, url: "https://www.linkedin.com/in/vishwanathan2004/", label: "LinkedIn" },
+                        { icon: <FaGithub className="text-gray-300" />, url: "https://github.com/Vishwanathangit/", label: "GitHub" },
+                        { icon: <FaBehance className="text-cyan-400" />, url: "https://www.behance.net/VishwanathanDesigns", label: "Behance" }
+                      ].map((social, index) => (
+                        <motion.a
+                          key={index}
+                          href={social.url}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="bg-gray-700/70 p-2 rounded-lg transition-all duration-200"
+                          whileHover={{ y: -2 }}
+                          aria-label={social.label}
+                        >
+                          {social.icon}
+                        </motion.a>
+                      ))}
+                    </div>
+                  </motion.div>
+                  <motion.div
+                    initial={{ opacity: 0, y: 10 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.3, delay: 0.1 }}
+                    className="space-y-4"
+                  >
+                    <h4 className="text-lg font-semibold text-gray-100">Quick Links</h4>
+                    <ul className="space-y-2">
+                      {[
+                        { name: "Home", href: "#home" },
+                        { name: "About", href: "#about" },
+                        { name: "Resume", href: "#about" },
+                        { name: "Experience", href: "#experience" },
+                        { name: "Contact", href: "#contact" }
+                      ].map((link, index) => (
+                        <li key={index}>
+                          <a
+                            href={link.href}
+                            className="text-gray-300 hover:text-cyan-400 transition-colors text-sm"
+                          >
+                            {link.name}
+                          </a>
+                        </li>
+                      ))}
+                    </ul>
+                  </motion.div>
+                  <motion.div
+                    initial={{ opacity: 0, y: 10 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.3, delay: 0.2 }}
+                    className="space-y-4"
+                  >
+                    <h4 className="text-lg font-semibold text-gray-100">Get In Touch</h4>
+                    <ul className="space-y-2 text-sm">
+                      <li className="flex justify-center md:justify-start items-center text-gray-300">
+                        <FaEnvelope className="mr-2 text-green-400" />
+                        <a
+                          href="mailto:vishwanathan1720@gmail.com"
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="hover:text-cyan-400 transition-colors"
+                        >
+                          vishwanathan1720@gmail.com
+                        </a>
+                      </li>
+                      <li className="flex justify-center md:justify-start items-center text-gray-300">
+                        <FaPhone className="mr-2 text-purple-400" />
+                        <a href="tel:+917305266720" className="hover:text-cyan-400 transition-colors">
+                          +91 7305266720
+                        </a>
+                      </li>
+                      <li className="flex justify-center md:justify-start items-center text-gray-300">
+                        <FaMapMarkerAlt className="mr-2 text-blue-400" />
+                        Chennai, Tamil Nadu
+                      </li>
+                    </ul>
+                  </motion.div>
+                </div>
+                <motion.div
+                  initial={{ opacity: 0, y: 10 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.3, delay: 0.3 }}
+                  className="mt-12 text-center text-gray-400 text-sm"
+                >
+                  © {new Date().getFullYear()} Vishwa. All rights reserved.
+                </motion.div>
+              </div>
+            </footer>
+          );
+        }
+        ---
+
+      📄 Home.jsx
+        ---
+        import { useEffect, useState } from "react";
+        import React from "react";
+        import { RevealOnScroll } from "../RevealOnScroll";
+        import { FaReact, FaNodeJs } from "react-icons/fa";
+        import { SiMongodb, SiExpress } from "react-icons/si";
+        import { motion } from "framer-motion";
+        export const Home = () => {
+          const [typingText, setTypingText] = useState("");
+          const roles = ["MERN Stack Developer", "Full Stack Developer","Software Developer","UI/UX Designer", "Web Developer", "Junior Web Developer"];
+          const [currentRoleIndex, setCurrentRoleIndex] = useState(0);
+          const [isDeleting, setIsDeleting] = useState(false);
+          const typingSpeed = 100;
+          const deletingSpeed = 50;
+          const delayBetweenRoles = 1000;
+          useEffect(() => {
+            const typeWriter = () => {
+              const currentRole = roles[currentRoleIndex];
+              if (isDeleting) {
+                setTypingText(currentRole.substring(0, typingText.length - 1));
+              } else {
+                setTypingText(currentRole.substring(0, typingText.length + 1));
+              }
+              if (!isDeleting && typingText === currentRole) {
+                setTimeout(() => setIsDeleting(true), delayBetweenRoles);
+              } else if (isDeleting && typingText === "") {
+                setIsDeleting(false);
+                setCurrentRoleIndex((prev) => (prev + 1) % roles.length);
+              }
+            };
+            const timer = setTimeout(typeWriter, isDeleting ? deletingSpeed : typingSpeed);
+            return () => clearTimeout(timer);
+          }, [typingText, currentRoleIndex, isDeleting]);
+          const iconStyle =
+            "flex flex-col items-center transform transition-transform duration-300 hover:rotate-x-12 hover:rotate-y-6 hover:scale-110 perspective-1000";
+          return (
+            <section
+              id="home"
+              className="min-h-screen flex items-center justify-center relative overflow-hidden perspective-1000"
+            >
+              <div className="absolute top-1/4 left-1/4 w-64 h-64 rounded-full bg-blue-500/10 filter blur-md animate-pulse opacity-20"></div>
+              <div className="absolute bottom-1/4 right-1/4 w-64 h-64 rounded-full bg-cyan-500/10 filter blur-md animate-pulse opacity-20"></div>
+              <RevealOnScroll>
+                <div className="text-center z-10 px-4 max-w-4xl mx-auto">
+                  <motion.h1
+                    initial={{ opacity: 0, y: 20, scale: 0.95 }}
+                    animate={{ opacity: 1, y: 0, scale: 1 }}
+                    transition={{ duration: 0.8, ease: "easeOut" }}
+                   className="text-3xl sm:text-4xl md:text-6xl lg:text-7xl font-bold mb-6 bg-gradient-to-r from-blue-400 to-cyan-300 bg-clip-text text-transparent leading-tight"
+                  >
+                    Hi, I'm &lt;Vishwa /&gt;
+                  </motion.h1>
+                  <div className="h-16 mb-8 flex items-center justify-center">
+                    <span className="text-2xl md:text-3xl font-mono text-blue-300">
+                      {typingText}
+                      <span className="animate-blink">|</span>
+                    </span>
+                  </div>
+                  <motion.div
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: 1.5, duration: 1, ease: "easeOut" }}
+                    className="flex justify-center space-x-8 mb-8"
+                  >
+                    <motion.div className={iconStyle} whileHover={{ scale: 1.1, rotate: 5 }}>
+                      <FaReact className="text-4xl text-blue-400 drop-shadow-lg" />
+                      <span className="text-xs text-gray-300 mt-2">React</span>
+                    </motion.div>
+                    <motion.div className={iconStyle} whileHover={{ scale: 1.1, rotate: 5 }}>
+                      <SiExpress className="text-4xl text-gray-100 drop-shadow-lg" />
+                      <span className="text-xs text-gray-300 mt-2">Express</span>
+                    </motion.div>
+                    <motion.div className={iconStyle} whileHover={{ scale: 1.1, rotate: 5 }}>
+                      <FaNodeJs className="text-4xl text-green-400 drop-shadow-lg" />
+                      <span className="text-xs text-gray-300 mt-2">Node.js</span>
+                    </motion.div>
+                    <motion.div className={iconStyle} whileHover={{ scale: 1.1, rotate: 5 }}>
+                      <SiMongodb className="text-4xl text-green-500 drop-shadow-lg" />
+                      <span className="text-xs text-gray-300 mt-2">MongoDB</span>
+                    </motion.div>
+                  </motion.div>
+                  <motion.p
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: 0.5, duration: 1, ease: "easeOut" }}
+                    className="text-gray-300 text-lg mb-8 max-w-2xl mx-auto"
+                  >
+                    I build modern web applications with cutting-edge technologies.
+                    Focused on creating responsive, scalable, and user-friendly solutions.
+                  </motion.p>
+                  <motion.div
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: 1, duration: 0.8, ease: "easeOut" }}
+                    className="flex justify-center space-x-4"
+                  >
+                    <motion.a
+                      href="#projects"
+                      className="relative overflow-hidden bg-blue-600 text-white py-3 px-6 rounded-lg font-medium transition-all hover:bg-blue-500 hover:shadow-[0_0_20px_rgba(59,130,246,0.5)]"
+                      whileHover={{ scale: 1.05 }}
+                      whileTap={{ scale: 0.95 }}
+                    >
+                      <span className="relative z-10">View Projects</span>
+                      <span className="absolute inset-0 bg-blue-500 opacity-0 hover:opacity-100 transition-opacity duration-300"></span>
+                    </motion.a>
+                    <motion.a
+                      href="#contact"
+                      className="relative overflow-hidden border border-blue-400/50 text-blue-400 py-3 px-6 rounded-lg font-medium transition-all hover:bg-blue-400/10 hover:shadow-[0_0_15px_rgba(59,130,246,0.3)]"
+                      whileHover={{ scale: 1.05 }}
+                      whileTap={{ scale: 0.95 }}
+                    >
+                      <span className="relative z-10">Contact Me</span>
+                      <span className="absolute inset-0 bg-blue-400/10 opacity-0 hover:opacity-100 transition-opacity duration-300"></span>
+                    </motion.a>
+                  </motion.div>
+                </div>
+              </RevealOnScroll>
+              <div className="absolute inset-0 overflow-hidden pointer-events-none z-0">
+                {[...Array(15)].map((_, i) => {
+                  const Icon = i % 4 === 0 ? FaReact :
+                              i % 4 === 1 ? SiExpress :
+                              i % 4 === 2 ? FaNodeJs : SiMongodb;
+        
+                  const iconColor = i % 4 === 0 ? 'text-blue-400/20' :
+                                    i % 4 === 1 ? 'text-gray-200/20' :
+                                    i % 4 === 2 ? 'text-green-400/20' : 'text-green-500/20';
+                  const size = `${Math.random() * 3 + 2.5}rem`;
+                  return (
+                    <motion.div
+                      key={i}
+                      className={`absolute ${iconColor}`}
+                      style={{
+                        left: `${Math.random() * 100}%`,
+                        top: `${Math.random() * 100}%`,
+                        fontSize: size,
+                        zIndex: Math.floor(Math.random() * 2),
+                        opacity: 0.3,
+                      }}
+                      initial={{
+                        x: Math.random() * 50 - 25,
+                        y: Math.random() * 50 - 25,
+                        rotate: Math.random() * 360,
+                      }}
+                      animate={{
+                        x: [0, Math.random() * 15 - 7.5, 0],
+                        y: [0, Math.random() * 15 - 7.5, 0],
+                        rotate: [0, Math.random() * 20 - 10, 0],
+                      }}
+                      transition={{
+                        duration: Math.random() * 140 + 100,
+                        repeat: Infinity,
+                        ease: "easeInOut",
+                        repeatType: "reverse",
+                      }}
+                    >
+                      <Icon />
+                    </motion.div>
+                  );
+                })}
+              </div>
+            </section>
+          );
+        };
+        ---
+
+      📄 Interests.jsx
+        ---
+        import { motion } from "framer-motion";
+        import React from "react";
+        import { RevealOnScroll } from "../RevealOnScroll";
+        import { FaCode, FaMusic, FaCamera, FaBook, FaGamepad, FaHiking, FaVideo, FaFigma, FaUtensils,  } from "react-icons/fa";
+        import { SiDevdotto, SiOpenai } from "react-icons/si";
+        import { MdSportsCricket } from "react-icons/md";
+        export const Interests = () => {
+          const techInterests = [
+            { name: "Web Development", icon: <FaCode className="text-blue-400" /> },
+            { name: "UI/UX Design", icon: <SiDevdotto className="text-purple-400" /> },
+            { name: "App Design", icon: <FaFigma className="text-green-400" /> },
+            { name: "AI Prompting", icon: <SiOpenai className="text-red-400" /> }
+          ];
+          const creativeInterests = [
+            { name: "Photography", icon: <FaCamera className="text-yellow-400" /> },
+            { name: "Music Production", icon: <FaMusic className="text-pink-400" /> },
+            { name: "Creative Writing", icon: <FaBook className="text-cyan-400" /> },
+            { name: "Video Editing", icon: <FaVideo className="text-orange-400" /> }
+          ];
+          const otherInterests = [
+            { name: "Cricket", icon: <MdSportsCricket className="text-blue-400 text-xl" /> },
+            { name: "Trekking", icon: <FaHiking className="text-green-400" /> },
+           { name: "Gaming", icon: <FaGamepad className="text-red-400" /> },
+            { name: "Cooking", icon: <FaUtensils className="text-yellow-400" /> }
+          ];
+          return (
+            <section
+              id="interests"
+              className="py-20 bg-gradient-to-b from-gray-900 to-purple-900/10 relative overflow-hidden"
+            >
+              <RevealOnScroll>
+                <div className="max-w-7xl mx-auto px-4">
+                  <motion.div
+                    initial={{ opacity: 0, y: 10 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.3 }}
+                    className="text-center mb-12"
+                  >
+                    <h2 className="text-4xl font-bold mb-4 bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent">
+                      My Interests
+                    </h2>
+                    <p className="text-gray-300 max-w-2xl mx-auto text-lg">
+                      Beyond code - things that inspire and motivate me
+                    </p>
+                  </motion.div>
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+                    <motion.div
+                      initial={{ opacity: 0, y: 20 }}
+                      whileInView={{ opacity: 1, y: 0 }}
+                      transition={{ duration: 0.5 }}
+                      className="bg-gray-800/70 rounded-lg border border-gray-500 p-8"
+                    >
+                      <div className="flex items-center mb-6">
+                        <div className="bg-blue-500/20 p-3 rounded-lg mr-4">
+                          <FaCode className="text-blue-400 text-2xl" />
+                        </div>
+                        <h3 className="text-2xl font-bold text-gray-100">Tech & Code</h3>
+                      </div>
+                      <div className="grid grid-cols-2 gap-4">
+                        {techInterests.map((interest, index) => (
+                          <motion.div
+                            key={index}
+                            whileHover={{ scale: 1.05 }}
+                            className="bg-gray-700/30 rounded-lg p-4 flex items-center space-x-3 border border-gray-500"
+                          >
+                            <div className="text-xl">{interest.icon}</div>
+                            <span className="text-gray-300 text-sm">{interest.name}</span>
+                          </motion.div>
+                        ))}
+                      </div>
+                    </motion.div>
+                    <motion.div
+                      initial={{ opacity: 0, y: 20 }}
+                      whileInView={{ opacity: 1, y: 0 }}
+                      transition={{ duration: 0.5, delay: 0.1 }}
+                      className="bg-gray-800/70 rounded-lg border border-gray-500 p-8"
+                    >
+                      <div className="flex items-center mb-6">
+                        <div className="bg-purple-500/20 p-3 rounded-lg mr-4">
+                          <FaCamera className="text-purple-400 text-2xl" />
+                        </div>
+                        <h3 className="text-2xl font-bold text-gray-100">Creative Pursuits</h3>
+                      </div>
+                      <div className="grid grid-cols-2 gap-4">
+                        {creativeInterests.map((interest, index) => (
+                          <motion.div
+                            key={index}
+                            whileHover={{ scale: 1.05 }}
+                            className="bg-gray-700/30 rounded-lg p-4 flex items-center space-x-3 border border-gray-500"
+                          >
+                            <div className="text-xl">{interest.icon}</div>
+                            <span className="text-gray-300 text-sm">{interest.name}</span>
+                          </motion.div>
+                        ))}
+                      </div>
+                    </motion.div>
+                    <motion.div
+                      initial={{ opacity: 0, y: 20 }}
+                      whileInView={{ opacity: 1, y: 0 }}
+                      transition={{ duration: 0.5, delay: 0.2 }}
+                      className="bg-gray-800/70 rounded-lg border border-gray-500 p-8"
+                    >
+                      <div className="flex items-center mb-6">
+                        <div className="bg-green-500/20 p-3 rounded-lg mr-4">
+                          <FaHiking className="text-green-400 text-2xl" />
+                        </div>
+                        <h3 className="text-2xl font-bold text-gray-100">Other Passions</h3>
+                      </div>
+                      <div className="grid grid-cols-2 gap-4">
+                        {otherInterests.map((interest, index) => (
+                          <motion.div
+                            key={index}
+                            whileHover={{ scale: 1.05 }}
+                            className="bg-gray-700/30 rounded-lg p-4 flex items-center space-x-3 border border-gray-500"
+                          >
+                            <div className="text-xl">{interest.icon}</div>
+                            <span className="text-gray-300 text-sm">{interest.name}</span>
+                          </motion.div>
+                        ))}
+                      </div>
+                    </motion.div>
+                  </div>
+                  <motion.div
+                    initial={{ opacity: 0, y: 10 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.3, delay: 0.3 }}
+                    className="mt-12 bg-gray-800/70 rounded-lg border border-gray-500 p-8"
+                  >
+                    <h3 className="text-2xl font-bold mb-4 text-gray-100 flex items-center">
+                      <FaCode className="mr-3 text-pink-400" />
+                      Why These Matter
+                    </h3>
+                    <p className="text-gray-300 text-sm">
+                      My diverse interests fuel creativity in my development work. Photography teaches me about composition 
+                      that translates to UI design, music production helps me understand rhythm in user flows, and trekking 
+                      reminds me that the best solutions often come when I step away from the screen.
+                    </p>
+                  </motion.div>
+                </div>
+              </RevealOnScroll>
+            </section>
+          );
+        };
+        export default Interests;
+        ---
+
+      📄 Projects.jsx
+        ---
+        import { RevealOnScroll } from "../RevealOnScroll";
+        import React from "react";
+        import { FaGithub, FaExternalLinkAlt, FaCode, FaNode, FaReact, FaHtml5, FaBootstrap, FaCss3 } from "react-icons/fa";
+        import { motion } from "framer-motion";
+        import { MdOutlineApi } from "react-icons/md";
+        import { SiTailwindcss, SiReact, SiJavascript, SiExpress } from "react-icons/si";
+        import MovieAppImage from "../../assets/Images/Movie App.png";
+        import WeatherAppImage from "../../assets/Images/Weather App.png";
+        import TaskAppImage from "../../assets/Images/Task Management App.png";
+        import AppleCloneImage from "../../assets/Images/Apple Clone.jpeg";
+        import SymposiumImage from "../../assets/Images/Pranav.png";
+        import EcommerceImage from "../../assets/Images/Nostra.png";
+        import DeepSightX from "../../assets/Images/DeepSightX.png";
+        import Udemy from "../../assets/Images/Udemy-React.jpeg";
+        import Trip from "../../assets/Images/Tripadvisor.png";
+        export const Projects = () => {
+          const projects = [
+            {
+              title: "DeepSightX",
+              description:
+                "AI Disease Detection Web App built with React, Tailwind CSS, and Roboflow API. Supports image and webcam input, real-time diagnosis of eye conditions, PDF report generation, and responsive design. Enables accessible healthcare with lightweight deployment.",
+              technologies: [
+                { name: "React", icon: <FaReact className="text-blue-400" /> },
+                { name: "Tailwind CSS", icon: <SiTailwindcss className="text-purple-400" /> },
+                { name: "Node.js", icon: <FaNode className="text-green-500" /> },
+                { name: "RoboFlowAPI", icon: <MdOutlineApi className="text-green-500" /> },
+              ],
+              codeLink: "https://github.com/Vishwanathangit/DeepSightX.git",
+              liveLink: "https://deepsightx.netlify.app/",
+              image: DeepSightX,
+            },
+            {
+              title: "Movie App",
+              description:
+                "Movie Web Application built with React and TMDB API. Includes genre-based browsing, search functionality, paginated results, and a dynamic wishlist. Built using React Router for multi-page navigation and state management for real-time updates.",
+              technologies: [
+                { name: "React", icon: <FaReact className="text-blue-400" /> },
+                { name: "Tailwind CSS", icon: <SiTailwindcss className="text-purple-400" /> },
+                { name: "Node.js", icon: <FaNode className="text-green-500" /> },
+                { name: "API", icon: <MdOutlineApi className="text-green-500" /> },
+              ],
+              codeLink: "https://github.com/Vishwanathangit/Movie-App-React.git",
+              liveLink: "https://movie-app-react-ruby.vercel.app/",
+              image: MovieAppImage,
+            },
+            {
+              title: "Weather App React",
+              description:
+                "Responsive Weather App built with React, Vite, and Tailwind CSS. Integrates OpenWeatherMap API to display real-time weather by city, including temperature and conditions. Features clean UI, mobile-friendly design, and environment-based API key handling.",
+              technologies: [
+                { name: "React", icon: <FaReact className="text-blue-400" /> },
+                { name: "Tailwind CSS", icon: <SiTailwindcss className="text-purple-400" /> },
+                { name: "Node.js", icon: <FaNode className="text-green-500" /> },
+                { name: "API", icon: <MdOutlineApi className="text-green-500" /> },
+              ],
+              codeLink: "https://github.com/Vishwanathangit/Weather-App-React.git",
+              liveLink: "https://weather-app-react-flame-chi.vercel.app/",
+              image: WeatherAppImage,
+            },
+            {
+              title: "Task Management App",
+              description:
+                "Task Management App built with React and React Router DOM. Features full CRUD functionality with form and table layout, local storage integration for data persistence, and multi-page routing using URL parameters.",
+              technologies: [
+                { name: "React", icon: <FaReact className="text-blue-400" /> },
+                { name: "Tailwind CSS", icon: <SiTailwindcss className="text-purple-400" /> },
+                { name: "Node.js", icon: <FaNode className="text-green-500" /> },
+              ],
+              codeLink: "https://github.com/Vishwanathangit/Task-Management-App-React.git",
+              liveLink: "https://task-management-app-react-one.vercel.app/",
+              image: TaskAppImage,
+            },
+            {
+              title: "Apple Clone",
+              description:
+                "Static Apple website clone built with ReactJS. Focused on creating a clean, responsive UI using reusable components. Strengthened skills in JSX, props, and component-based architecture for scalable front-end development.",
+              technologies: [
+                { name: "React", icon: <FaReact className="text-blue-400" /> },
+                { name: "Tailwind CSS", icon: <SiTailwindcss className="text-purple-400" /> },
+                { name: "Node.js", icon: <FaNode className="text-green-500" /> },
+              ],
+              codeLink: "https://github.com/Vishwanathangit/Apple-Clone-React.git",
+              liveLink: "https://apple-clone-react-sage.vercel.app/",
+              image: AppleCloneImage,
+            },
+            {
+              title: "Symposium Pranav 2K24",
+              description:
+                "Symposium Website built using HTML, CSS, Bootstrap, and JavaScript. Led the team as Team Lead to create a fully responsive, multi-page site with sections like Home, About, and Events. Deployed on Hostinger with cross-browser compatibility and structured, user-friendly design.",
+              technologies: [
+                { name: "Html", icon: <FaHtml5 className="text-blue-400" /> },
+                { name: "CSS", icon: <FaCss3 className="text-purple-400" /> },
+                { name: "BootStrap", icon: <FaBootstrap className="text-green-500" /> },
+                { name: "JavaScript", icon: <SiJavascript className="text-blue-400" /> },
+              ],
+              codeLink: "https://github.com/Vishwanathangit/Pranav-2K24.git",
+              liveLink: "https://pranav2k24.netlify.app/",
+              image: SymposiumImage,
+            },
+            {
+              title: "Nostra E - Commerce",
+              description:
+                "Nostra E-commerce website built from scratch using HTML, CSS, and JavaScript. Features include a functional search bar, checkbox-based filtering, scroll-triggered animations, and a fully responsive, user-friendly UI.",
+              technologies: [
+                { name: "Html", icon: <FaHtml5 className="text-blue-400" /> },
+                { name: "Css", icon: <FaCss3 className="text-gray-300" /> },
+                { name: "JavaScript", icon: <SiJavascript className="text-purple-500" /> },
+              ],
+              codeLink: "https://github.com/Vishwanathangit/Nostra-E-Commerce-Clone.git",
+              liveLink: "https://vishwanathangit.github.io/Nostra-E-Commerce-Clone/",
+              image: EcommerceImage,
+            },
+            {
+              title: "Udemy - Clone",
+              description:
+                "Udemy clone rebuilt using ReactJS, transforming a static HTML/CSS site into reusable components. Gained hands-on experience with React rendering and structure. Deployed live on Vercel for easy sharing and testing.",
+              technologies: [
+                { name: "React", icon: <FaReact className="text-blue-400" /> },
+                { name: "Tailwind CSS", icon: <SiTailwindcss className="text-gray-300" /> },
+              ],
+              codeLink: "https://github.com/Vishwanathangit/Udemy-Clone-React.git",
+              liveLink: "https://udemy-clone-react-ruddy.vercel.app/",
+              image: Udemy,
+            },
+            {
+              title: "Tripadvisor - Clone",
+              description:
+                "Tripadvisor clone website built with HTML and CSS. Implemented Flexbox, media queries, and positioning for a fully responsive design. Gained hands-on experience with layout adaptation and deployed the project via GitHub.",
+              technologies: [
+                { name: "Html", icon: <FaHtml5 className="text-blue-400" /> },
+                { name: "Css", icon: <FaCss3 className="text-gray-300" /> },
+              ],
+              codeLink: "https://github.com/Vishwanathangit/Tripadvisor-Clone.git",
+              liveLink: "https://vishwanathangit.github.io/Tripadvisor-Clone/",
+              image: Trip,
+            },
+          ];
+          const handleTouchStart = (e) => {
+            console.log("Touch event triggered on:", e.target);
+          };
+          const handleLinkClick = (url) => {
+            console.log("Navigating to:", url);
+            window.open(url, "_blank", "noopener");
+          };
+          return (
+            <section id="projects" className="h-auto py-12 bg-gradient-to-b from-gray-900 to-indigo-900/10 relative">
+              <div className="absolute inset-0 pointer-events-none z-0 overflow-visible">
+                {[...Array(12)].map((_, i) => {
+                  const icons = [FaCode, SiJavascript, SiReact, SiExpress, FaHtml5, SiTailwindcss];
+                  const Icon = icons[i % icons.length];
+                  return (
+                    <motion.div
+                      key={i}
+                      className="absolute text-white/30 text-3xl sm:text-4xl"
+                      initial={{
+                        x: `${Math.random() * 100}%`,
+                        y: `${Math.random() * 100}%`,
+                        scale: 0.8,
+                      }}
+                      animate={{
+                        y: [0, Math.random() * 30 - 15],
+                        transition: {
+                          duration: 8 + Math.random() * 4,
+                          repeat: Infinity,
+                          repeatType: "reverse",
+                          ease: "easeInOut",
+                        },
+                      }}
+                      style={{
+                        left: `${Math.random() * 100}%`,
+                        top: `${Math.random() * 100}%`,
+                        transform: "translate(-50%, -50%)",
+                      }}
+                    >
+                      <Icon />
+                    </motion.div>
+                  );
+                })}
+              </div>
+              <RevealOnScroll>
+                <div className="max-w-7xl mx-auto px-4 w-full">
+                  <div className="text-center mb-8">
+                    <motion.h2
+                      initial={{ opacity: 0, y: 20 }}
+                      whileInView={{ opacity: 1, y: 0 }}
+                      transition={{ duration: 0.6 }}
+                      className="text-2xl sm:text-3xl font-bold mb-3 bg-gradient-to-r from-indigo-400 to-cyan-400 bg-clip-text text-transparent"
+                    >
+                      My Projects
+                    </motion.h2>
+                    <motion.p
+                      initial={{ opacity: 0 }}
+                      whileInView={{ opacity: 1 }}
+                      transition={{ delay: 0.2, duration: 0.6 }}
+                      className="text-gray-400 max-w-2xl mx-auto text-sm sm:text-base px-4"
+                    >
+                      A collection of my best work, each crafted with attention to detail and innovative solutions
+                    </motion.p>
+                  </div>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 max-w-full">
+                    {projects.map((project, index) => (
+                      <motion.div
+                        key={index}
+                        initial={{ opacity: 0, y: 30 }}
+                        whileInView={{ opacity: 1, y: 0 }}
+                        transition={{ duration: 0.5, delay: index * 0.1 }}
+                        viewport={{ once: true, margin: "-50px" }}
+                        className="h-full"
+                        onTouchStart={handleTouchStart}
+                      >
+                        <div className="h-full bg-gray-800/50 rounded-xl border border-gray-700/50 hover:border-indigo-500/30 transition-all duration-300 hover:shadow-lg flex flex-col">
+                          <div className="h-32 sm:h-40 relative">
+                            <img
+                              src={project.image}
+                              alt={project.title}
+                              className="w-full h-full object-contain"
+                              loading="lazy"
+                              onError={(e) => {
+                                e.target.src = "https://via.placeholder.com/400x300?text=Image+Not+Found";
+                                console.log(`Image failed to load: ${project.title}`);
+                              }}
+                            />
+                            <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-70"></div>
+                            <div className="absolute bottom-2 left-2 flex space-x-1">
+                              {project.technologies.slice(0, 3).map((tech, i) => (
+                                <span key={i} className="bg-black/30 p-1 rounded-md text-xs">
+                                  {tech.icon}
+                                </span>
+                              ))}
+                            </div>
+                          </div>
+                          <div className="p-4 flex-grow flex flex-col">
+                            <h3 className="text-lg sm:text-xl font-bold text-white mb-2 hover:text-indigo-400 transition-colors">
+                              {project.title}
+                            </h3>
+                            <p className="text-gray-300 mb-4 text-sm sm:text-base line-clamp-3">
+                              {project.description}
+                            </p>
+                            <div className="mb-4">
+                              <h4 className="text-xs sm:text-sm text-gray-400 mb-2">Technologies Used:</h4>
+                              <div className="flex flex-wrap gap-1 sm:gap-2">
+                                {project.technologies.map((tech, i) => (
+                                  <span
+                                    key={i}
+                                    className="bg-gray-700/50 text-gray-300 py-1 px-2 sm:px-3 rounded-full text-xs flex items-center gap-1"
+                                  >
+                                    {tech.icon}
+                                    {tech.name}
+                                  </span>
+                                ))}
+                              </div>
+                            </div>
+                            <div className="flex space-x-2 mt-auto">
+                              <a
+                                href={project.codeLink}
+                                onClick={() => handleLinkClick(project.codeLink)}
+                                className="flex-1 flex items-center justify-center bg-gray-700 hover:bg-gray-600 text-gray-300 hover:text-white py-2 px-3 rounded-lg text-xs sm:text-sm transition-all duration-300"
+                                target="_blank"
+                                rel="noopener noreferrer"
+                              >
+                                <FaGithub className="mr-1" />
+                                Code
+                              </a>
+                              <a
+                                href={project.liveLink}
+                                onClick={() => handleLinkClick(project.liveLink)}
+                                className="flex-1 flex items-center justify-center bg-indigo-600 hover:bg-indigo-500 text-white py-2 px-3 rounded-lg text-xs sm:text-sm transition-all duration-300"
+                                target="_blank"
+                                rel="noopener noreferrer"
+                              >
+                                <FaExternalLinkAlt className="mr-1" />
+                                Live Demo
+                              </a>
+                            </div>
+                          </div>
+                        </div>
+                      </motion.div>
+                    ))}
+                  </div>
+                  <motion.div
+                    initial={{ opacity: 0 }}
+                    whileInView={{ opacity: 1 }}
+                    transition={{ delay: 0.4 }}
+                    className="text-center mt-8"
+                  >
+                    <a
+                      href="https://github.com/Vishwanathangit"
+                      onClick={() => handleLinkClick("https://github.com/Vishwanathangit")}
+                      className="inline-flex items-center px-4 py-2 border border-indigo-500/30 text-indigo-400 rounded-full hover:bg-indigo-500/10 transition-all duration-300 text-sm"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      View All Projects
+                      <svg
+                        className="ml-2 w-3 h-3"
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth="2"
+                          d="M14 5l7 7m0 0l-7 7m7-7H3"
+                        />
+                      </svg>
+                    </a>
+                  </motion.div>
+                </div>
+              </RevealOnScroll>
+            </section>
+          );
+        };
+        export default Projects;
+        ---
+
+      📄 Skills.jsx
+        ---
+        import { motion } from "framer-motion";
+        import React from "react";
+        import { RevealOnScroll } from "../RevealOnScroll";
+        import { MdOutlineApi } from "react-icons/md";
+        import {FaReact,FaNodeJs,FaPython,FaGitAlt,FaFigma,FaGithub,FaJava,FaDatabase,FaBehance} from "react-icons/fa6";
+        import {SiTailwindcss,SiJavascript,SiHtml5,SiCss3,SiBootstrap,SiCanva,SiMysql,SiPostman,SiOpenai,SiPycharm,SiIntellijidea,SiVercel} from "react-icons/si";
+        import VSCodeImage from "../../assets/Images/Vscode.png";
+        export const Skills = () => {
+          const skills = [
+            { name: "HTML5", icon: <SiHtml5 className="text-orange-500" /> },
+            { name: "CSS3", icon: <SiCss3 className="text-blue-500" /> },
+            { name: "BootStrap", icon: <SiBootstrap className="text-blue-500" /> },
+            { name: "Tailwind CSS", icon: <SiTailwindcss className="text-cyan-400" /> },
+            { name: "JavaScript", icon: <SiJavascript className="text-yellow-400" /> },
+            { name: "React", icon: <FaReact className="text-blue-400" /> },
+            { name: "Node.js", icon: <FaNodeJs className="text-green-500" /> },
+            { name: "Java", icon: <FaJava className="text-white" /> },
+            { name: "Python", icon: <FaPython className="text-yellow-400" /> },
+            { name: "SQL", icon: <FaDatabase className="text-blue-500" /> },
+            { name: "MySQL", icon: <SiMysql className="text-blue-500" /> },
+            { name: "VS Code", icon: <img src={VSCodeImage} alt="VS Code" className="w-8 h-8" /> },
+            { name: "PyCharm", icon: <SiPycharm className="text-green-500" /> },
+            { name: "IntelliJ", icon: <SiIntellijidea className="text-red-500" /> },
+            { name: "Prompt Engineering", icon: <SiOpenai className="text-white" /> },
+            { name: "PostMan", icon: <SiPostman className="text-orange-500" /> },
+            { name: "REST APIs", icon: <MdOutlineApi className="text-green-400" /> },
+            { name: "Git", icon: <FaGitAlt className="text-orange-500" /> },
+            { name: "GitHub", icon: <FaGithub className="text-white" /> },
+            { name: "Vercel", icon: <SiVercel className="text-white-500" /> },
+            { name: "Figma", icon: <FaFigma className="text-purple-500" /> },
+            { name: "Canva", icon: <SiCanva className="text-purple" /> },
+            { name: "Behance", icon: <FaBehance className="text-white-500" /> }
+          ];
+        return (
+            <section
+              id="skills"
+              className="min-h-screen flex items-center justify-center py-20 bg-gray-900 relative overflow-hidden"
+            >
+              <RevealOnScroll>
+                <div className="max-w-7xl mx-auto px-4 w-full">
+                  <div className="text-center mb-16">
+                    <h2 className="text-4xl font-bold mb-4 bg-gradient-to-r from-blue-400 to-cyan-400 bg-clip-text text-transparent">
+                      My Tech Stack
+                    </h2>
+                    <p className="text-gray-400 max-w-2xl mx-auto text-lg">
+                      Technologies I work with regularly
+                    </p>
+                  </div>
+                  <div className="flex flex-wrap justify-center gap-6 mb-16">
+                    {skills.map((skill, index) => (
+                      <motion.div
+                        key={index}
+                        initial={{ opacity: 0, scale: 0.8 }}
+                        whileInView={{ opacity: 1, scale: 1 }}
+                        whileHover={{ scale: 1.1 }}
+                        transition={{ duration: 0.3, delay: index * 0.03 }}
+                        viewport={{ once: true }}
+                        className="flex flex-col items-center w-20"
+                      >
+                        <div
+                          className="bg-gray-800 p-4 rounded-xl text-4xl transition duration-300 ease-in-out
+                                     hover:shadow-[0_0_20px_4px_rgba(34,211,238,0.6)]"
+                        >
+                          {skill.icon}
+                        </div>
+                        <span className="mt-3 text-gray-300 text-sm text-center">
+                          {skill.name}
+                        </span>
+                      </motion.div>
+                    ))}
+                  </div>
+                  <div className="mt-8 flex justify-center">
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-6 w-full max-w-3xl">
+                      {[
+                        { label: "Years Experience", value: "2+" },
+                        { label: "Projects Built", value: "10+" },
+                        { label: "Lines of Code", value: "5000+" }
+                      ].map((item, index) => (
+                        <motion.div
+                          key={index}
+                          initial={{ opacity: 0, y: 20 }}
+                          whileInView={{ opacity: 1, y: 0 }}
+                          transition={{ duration: 0.5, delay: index * 0.1 }}
+                          className="bg-gray-800/50 rounded-xl p-6 text-center border border-gray-700/50"
+                        >
+                          <div className="text-3xl font-bold mb-2 text-blue-400">
+                            {item.value}
+                          </div>
+                          <div className="text-gray-400">{item.label}</div>
+                        </motion.div>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+              </RevealOnScroll>
+            </section>
+          );
+        };
+        export default Skills;
+        ---
+
+  📄 index.css
+    ---
+    @import "tailwindcss";
+    
+    html,
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: "Space Grotesk", sans-serif;
+      background: #0a0a0a;
+      color: #f3f4f6;
+      scroll-behavior: smooth;
+      overflow-x: hidden; /* Prevent horizontal scrolling */
+      width: 100%; /* Ensure full width without overflow */
+    }
+    
+    @layer utilities {
+      /* Reveal animation */
+      .reveal {
+        opacity: 0;
+        transform: translateY(20px);
+        transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+      }
+    
+      .reveal.visible {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    
+      /* Custom scrollbar */
+      ::-webkit-scrollbar {
+        width: 8px;
+      }
+    
+      ::-webkit-scrollbar-track {
+        background: #0a0a0a;
+      }
+    
+      ::-webkit-scrollbar-thumb {
+        background: #3b82f6;
+        border-radius: 4px;
+      }
+    
+      ::-webkit-scrollbar-thumb:hover {
+        background: #2563eb;
+      }
+    
+      /* Bounce animation */
+      @keyframes bounce {
+        0%,
+        100% {
+          transform: translateY(0);
+        }
+        50% {
+          transform: translateY(-5px);
+        }
+      }
+    
+      .animate-bounce {
+        animation: bounce 1s infinite;
+      }
+    
+      /* Pulse animation */
+      @keyframes pulse {
+        0%,
+        100% {
+          opacity: 1;
+        }
+        50% {
+          opacity: 0.6;
+        }
+      }
+    
+      .animate-pulse {
+        animation: pulse 1.5s infinite;
+      }
+    
+      /* Float animation for icons */
+      @keyframes float {
+        0%,
+        100% {
+          transform: translateY(0);
+        }
+        50% {
+          transform: translateY(-5px);
+        }
+      }
+    
+      .animate-float {
+        animation: float 3s ease-in-out infinite;
+      }
+    
+      /* Social icon hover effect */
+      .social-icon {
+        transition: transform 0.3s ease;
+      }
+    
+      .social-icon:hover {
+        transform: translateY(-3px) scale(1.1);
+      }
+    
+      /* Button hover effect */
+      .submit-btn:hover {
+        transform: translateY(-2px);
+      }
+    
+      /* Form input focus effect */
+      input:focus,
+      textarea:focus {
+        box-shadow: 0 0 0 3px rgba(34, 211, 238, 0.3);
+      }
+    }
+    
+    /* Reduced motion preferences */
+    @media (prefers-reduced-motion: reduce) {
+      html {
+        scroll-behavior: auto;
+      }
+    
+      * {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+      }
+    }
+    
+    /* Ensure all sections and containers stay within viewport */
+    section {
+      width: 100%;
+      max-width: 100%;
+      overflow-x: hidden;
+    }
+    ---
+
+  📄 main.jsx
+    ---
+    import { StrictMode } from 'react'
+    import React from 'react'
+    import { createRoot } from 'react-dom/client'
+    import './index.css'
+    import App from './App.jsx'
+    
+    createRoot(document.getElementById('root')).render(
+      <StrictMode>
+        <App />
+      </StrictMode>,
+    )
+    
+    ---
+
+📄 vite.config.js
+  ---
+  import { defineConfig } from 'vite'
+  import tailwindcss from '@tailwindcss/vite'
+  export default defineConfig({
+    plugins: [
+      tailwindcss(),
+    ],
+  })
+  ---
+
+
+# Snapshot Summary
+Total files processed: 22
